@@ -3,6 +3,10 @@ id: tbeam
 title: LILYGO® TTGO T-Beam devices
 sidebar_label: LILYGO® T-Beam
 ---
+import { TbeamSvg } from '/src/components/hardware/TbeamSvg'
+let animationState = "charging"
+
+<TbeamSvg status={animationState}/>
 
 ## T-Beam - Meshtastic
 
