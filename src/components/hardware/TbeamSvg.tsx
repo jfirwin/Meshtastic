@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSpring, useSprings, animated } from 'react-spring'
+import { useSpring, useSprings, animated } from '@react-spring/web'
 
 export const TbeamSvg = (status): JSX.Element => {
   const blueSpring = useSpring({
