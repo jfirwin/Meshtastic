@@ -1,17 +1,17 @@
 import React from 'react';
-import { useSpring, useSprings, animated } from '@react-spring/web'
+import { useSpring, animated } from '@react-spring/web'
 
 export const TbeamSvg = (status): JSX.Element => {
+
   const blueSpring = useSpring({
     to: {
       fill: "rgb(255,255,255)",
       stroke: "rgba(255,255,255,0)",
-      strokeWidth: "0mm",
+      strokeWidth: "1mm",
     },
     from: {
       fill: "rgb(73,0,255)",
       stroke: "rgba(73,0,255,1)",
-      strokeWidth: "1mm"
     },
     loop: true,
     delay: 1000
@@ -20,12 +20,11 @@ export const TbeamSvg = (status): JSX.Element => {
     to: {
       fill: "rgb(255,255,255)",
       stroke: "rgba(255,255,255,0)",
-      strokeWidth: "0mm",
+      strokeWidth: "1mm",
     },
     from: {
       fill: "rgb(255,0,0)",
       stroke: "rgba(255,0,0,1)",
-      strokeWidth: "1mm"
     },
     loop: true,
     delay: 1000
