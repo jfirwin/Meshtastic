@@ -46,6 +46,7 @@ export interface IDevice {
   misc: {
     SuggestedUse: UseCase[];
     Stability: Stability;
+    InstabilityReason: string;
     ImagePath: string;
   };
   features: {

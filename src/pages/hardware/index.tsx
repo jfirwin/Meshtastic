@@ -1,6 +1,9 @@
 import React from 'react';
 import { IDevice } from '../../data/device';
 import { tbeam } from '../../data/devices/tbeam';
+import { techo } from '../../data/devices/techo';
+import { tlora } from '../../data/devices/tlora';
+import { heltec } from '../../data/devices/heltec';
 import { rak19003 } from '../../data/devices/rak19003';
 import Layout from '@theme/Layout';
 
@@ -8,17 +11,9 @@ const Hardware = (): JSX.Element => {
   const [selectedDevice, setSelectedDevice] = React.useState<IDevice>();
   const hardware = [
     tbeam,
-    rak19003,
-    rak19003,
-    rak19003,
-    rak19003,
-    rak19003,
-    rak19003,
-    rak19003,
-    rak19003,
-    rak19003,
-    rak19003,
-    rak19003,
+    techo,
+    tlora,
+    heltec,
     rak19003,
   ];
 
