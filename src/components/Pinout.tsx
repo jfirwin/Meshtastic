@@ -93,8 +93,8 @@ gpio.map((e, index) => {
     <svg height={dimensions.height} width={dimensions.width}>
     <defs xmlns="http://www.w3.org/2000/svg" id="defs2476">
       <linearGradient id="boardGradient">
-        <stop style={{stopColor:"#000000", stopOpacity:1}} offset="0" id="boardStop1"/>
-        <stop style={{stopColor:"#242424", stopOpacity:0.5}} offset="1" id="boardStop2"/>
+        <stop style={{stopColor:"#000000"}} offset="0" id="boardStop1"/>
+        <stop style={{stopColor:"#8b8b8b"}} offset="1" id="boardStop2"/>
       </linearGradient>
       <linearGradient xlinkHref="#boardGradient" id="boardGradient" x1={(dimensions.boardWidth / 2) + dimensions.xOffset} y1={dimensions.adjustedBoardHeight + dimensions.yOffset} x2={(dimensions.boardWidth / 2) + dimensions.xOffset} y2={dimensions.yOffset} gradientUnits="userSpaceOnUse"/>
     </defs>
