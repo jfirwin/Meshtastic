@@ -15,6 +15,7 @@ const dimensions = {
   boardHeight: 50,
   adjustedBoardHeight: null,
   boardWidth: 90,
+  adjustedBoardWidth: 90,
   cornerOffset: 9,
   halfCornerOffset: 9 / 2,
   cutoutRadius: 5,
@@ -22,11 +23,23 @@ const dimensions = {
   pinInterval: 15,
   xOffset: 0, // used for centering board on svg
   yOffset: 0, // used for centering board on svg
+  logoWidth: 40,
+  logoScale: 1,
+}
+
+const centeredMeshtasticLogo = () => {
+  let logoWidth = 30 * dimensions.logoScale
+  let logoHeight = 15.828 * dimensions.logoScale
+  let x = dimensions.xOffset + (10.049 * dimensions.logoScale) + (dimensions.adjustedBoardWidth / 2) - (logoWidth /2)
+  let y = dimensions.yOffset + (dimensions.adjustedBoardHeight / 2)
+
+  return `M ${x} ${y} l ${1.797 * dimensions.logoScale} ${1.225 * dimensions.logoScale} l ${-9.949 * dimensions.logoScale} ${14.59 * dimensions.logoScale} l ${-1.797 * dimensions.logoScale} ${-1.225 * dimensions.logoScale} l ${9.949 * dimensions.logoScale} ${-14.59 * dimensions.logoScale} l ${-9.949 * dimensions.logoScale} ${0 * dimensions.logoScale} z  m ${9.719 * dimensions.logoScale} ${3.337 * dimensions.logoScale} l ${-8.517 * dimensions.logoScale} ${12.491 * dimensions.logoScale} l ${-1.796 * dimensions.logoScale} ${-1.225 * dimensions.logoScale} l ${9.413 * dimensions.logoScale} ${-13.805 * dimensions.logoScale} c ${0.202236 * dimensions.logoScale} ${-0.29671931 * dimensions.logoScale} ${0.538164 * dimensions.logoScale} ${-0.47433818 * dimensions.logoScale} ${0.897234 * dimensions.logoScale} ${-0.47478038 * dimensions.logoScale} c ${0.359219 * dimensions.logoScale} ${-0.0002948 * dimensions.logoScale} ${0.695295 * dimensions.logoScale} ${0.17673445 * dimensions.logoScale} ${0.89812 * dimensions.logoScale} ${0.47315896 * dimensions.logoScale} l ${9.435 * dimensions.logoScale} ${13.784 * dimensions.logoScale} l ${-1.794 * dimensions.logoScale} ${1.228 * dimensions.logoScale} l ${-8.537 * dimensions.logoScale} ${-12.471 * dimensions.logoScale} z`
 }
 
 dimensions.adjustedBoardHeight = dimensions.boardHeight + (dimensions.pinInterval * (gpio.length))
 dimensions.xOffset = (dimensions.width / 2) - (dimensions.boardWidth / 2)
 dimensions.yOffset = (dimensions.height / 2) - (dimensions.adjustedBoardHeight / 2)
+dimensions.logoScale = dimensions.logoWidth / 30
 
 const corners = {
   topLeft: `C ${dimensions.halfCornerOffset + dimensions.xOffset} ${dimensions.yOffset -0.5} ${dimensions.xOffset -0.5} ${dimensions.halfCornerOffset + dimensions.yOffset} ${dimensions.xOffset} ${dimensions.cornerOffset + dimensions.yOffset}`,
@@ -34,7 +47,6 @@ const corners = {
   bottomRight: `C ${(dimensions.boardWidth - dimensions.halfCornerOffset) + dimensions.xOffset} ${dimensions.adjustedBoardHeight + dimensions.yOffset +0.5} ${dimensions.boardWidth + dimensions.xOffset +0.5} ${(dimensions.adjustedBoardHeight - dimensions.halfCornerOffset) + dimensions.yOffset} ${dimensions.boardWidth + dimensions.xOffset} ${(dimensions.adjustedBoardHeight - dimensions.cornerOffset) + dimensions.yOffset}`,
   topRight: `C ${dimensions.boardWidth + dimensions.xOffset} ${dimensions.halfCornerOffset + dimensions.yOffset -0.5} ${(dimensions.boardWidth - dimensions.halfCornerOffset) + dimensions.xOffset +0.5} ${dimensions.yOffset} ${(dimensions.boardWidth - dimensions.cornerOffset) + dimensions.xOffset} ${dimensions.yOffset}`
 }
-
 const path = [
   `M ${dimensions.cornerOffset + dimensions.xOffset} ${dimensions.yOffset}`, // Start point (x,y)
   `${corners.topLeft}`, // top left corner
@@ -46,6 +58,7 @@ const path = [
   `${corners.topRight}`, // top right corner
   `L ${dimensions.cornerOffset + dimensions.xOffset} ${dimensions.yOffset}`, // top boardWidth
   `z`, // close path
+  centeredMeshtasticLogo(),
   pathCircle((dimensions.cutoutRadius * 3) + dimensions.xOffset, (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // top left corner cutout
   pathCircle(dimensions.boardWidth - (dimensions.cutoutRadius) + dimensions.xOffset, (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // top right corner cutout
   pathCircle(dimensions.boardWidth - dimensions.cutoutRadius + dimensions.xOffset, dimensions.adjustedBoardHeight - (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // bottom right corner cutout
