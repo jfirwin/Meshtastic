@@ -1,13 +1,9 @@
 import React from 'react';
+import { CirclePath } from '@site/src/utils/pinout'
 
 export const Pinout = (gpio): JSX.Element => {
 
 gpio = [1,2,3,4,5,6,7,8,9,10,11,12,13]
-
-const pathCircle = (cx, cy, r) => {
-  // FIXME ${cy-r} should be cy+r
-  return `M ${cx-r} ${cy-r} a ${r} ${r} 0 0 1 ${r} ${r} a ${r} ${r} 0 0 1 -${r} ${r} a ${r} ${r} 0 0 1 -${r} -${r} a ${r} ${r} 0 0 1 ${r} -${r} z`
-}
 
 const dimensions = {
   height: "500",
@@ -59,10 +55,10 @@ const path = [
   `L ${dimensions.cornerOffset + dimensions.xOffset} ${dimensions.yOffset}`, // top boardWidth
   `z`, // close path
   centeredMeshtasticLogo(),
-  pathCircle((dimensions.cutoutRadius * 3) + dimensions.xOffset, (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // top left corner cutout
-  pathCircle(dimensions.boardWidth - (dimensions.cutoutRadius) + dimensions.xOffset, (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // top right corner cutout
-  pathCircle(dimensions.boardWidth - dimensions.cutoutRadius + dimensions.xOffset, dimensions.adjustedBoardHeight - (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // bottom right corner cutout
-  pathCircle((dimensions.cutoutRadius * 3) + dimensions.xOffset, dimensions.adjustedBoardHeight - (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // bottom left corner cutout
+  CirclePath((dimensions.cutoutRadius * 3) + dimensions.xOffset, (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // top left corner cutout
+  CirclePath(dimensions.boardWidth - (dimensions.cutoutRadius) + dimensions.xOffset, (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // top right corner cutout
+  CirclePath(dimensions.boardWidth - dimensions.cutoutRadius + dimensions.xOffset, dimensions.adjustedBoardHeight - (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // bottom right corner cutout
+  CirclePath((dimensions.cutoutRadius * 3) + dimensions.xOffset, dimensions.adjustedBoardHeight - (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // bottom left corner cutout
 ]
 
 const key = [
@@ -77,13 +73,13 @@ const key = [
 ]
 
 gpio.map((e, index) => {
-  path.push(pathCircle(
+  path.push(CirclePath(
     (dimensions.pinCutoutRadius * 10) + dimensions.xOffset, // x
     (dimensions.boardHeight / 2) + (dimensions.pinInterval / 2) + ((index) * (dimensions.pinInterval)) + dimensions.yOffset, // y
     dimensions.pinCutoutRadius // radius
   )) // Left side
-  path.push(pathCircle(
-    dimensions.boardWidth - (dimensions.pinCutoutRadius * 10) + dimensions.xOffset, // x
+  path.push(CirclePath(
+    dimensions.boardWidth - (dimensions.pinCutoutRadius * 9) + dimensions.xOffset, // x
     (dimensions.boardHeight / 2) + (dimensions.pinInterval / 2) + ((index) * (dimensions.pinInterval)) + dimensions.yOffset, // y
     dimensions.pinCutoutRadius // radius
   )) // Right side
@@ -96,8 +92,11 @@ gpio.map((e, index) => {
         <stop style={{stopColor:"#000000"}} offset="0" id="boardStop1"/>
         <stop style={{stopColor:"#8b8b8b"}} offset="1" id="boardStop2"/>
       </linearGradient>
-      <linearGradient xlinkHref="#boardGradient" id="boardGradient" x1={(dimensions.boardWidth / 2) + dimensions.xOffset} y1={dimensions.adjustedBoardHeight + dimensions.yOffset} x2={(dimensions.boardWidth / 2) + dimensions.xOffset} y2={dimensions.yOffset} gradientUnits="userSpaceOnUse"/>
+      <linearGradient xlinkHref="#boardGradient" id="boardGradient" x1={(dimensions.boardWidth / 2) + dimensions.xOffset} y1={dimensions.adjustedBoardHeight + dimensions.yOffset} x2={(dimensions.boardWidth / 2) + dimensions.xOffset} y2={dimensions.yOffset - 75} gradientUnits="userSpaceOnUse"/>
     </defs>
+      <rect fill="rgb(103, 234, 148)" height={dimensions.logoWidth} width={dimensions.logoWidth} x={dimensions.xOffset + (dimensions.adjustedBoardWidth / 2) - (dimensions.logoWidth /2)} y={dimensions.yOffset + (dimensions.adjustedBoardHeight /2) - dimensions.logoWidth/3}/>
+
+
       <rect height={dimensions.height} width={dimensions.width} fill="none"/>
       <g>
         {key.map((e, index) => {
@@ -106,7 +105,7 @@ gpio.map((e, index) => {
             <g x="10" y={(index + 1) * 20}>
               <rect height="20" width="20" x="0" y={keyY} fill={e.color}/>
               <rect height="2" width="10" x="30" y={keyY + 9} fill="black"/>
-              <text x="50" y={keyY + 15}>{e.name}</text>
+              <text x="50" y={keyY + 15} style={{fill: "var(--tw-prose-body)"}}>{e.name}</text>
             </g>
           )
         })}
@@ -125,15 +124,20 @@ gpio.map((e, index) => {
         )
       })}
       {gpio.map((e, index) => {
+        let y = (dimensions.boardHeight / 2) + (dimensions.pinInterval / 2) + ((index) * (dimensions.pinInterval)) + dimensions.yOffset
+        let x = dimensions.boardWidth - (dimensions.pinCutoutRadius * 9) - dimensions.pinCutoutRadius + dimensions.xOffset
         return (
-          <circle
-            cx={dimensions.boardWidth - (dimensions.pinCutoutRadius * 10) - dimensions.pinCutoutRadius + dimensions.xOffset}
-            cy={(dimensions.boardHeight / 2) + (dimensions.pinInterval / 2) + ((index) * (dimensions.pinInterval)) + dimensions.yOffset}
-            r={dimensions.pinCutoutRadius}
-            stroke="#c18b30"
-            strokeWidth={dimensions.pinCutoutRadius}
-            fill="none"
-          />
+          <g>
+            <circle
+              cx={x}
+              cy={y}
+              r={dimensions.pinCutoutRadius}
+              stroke="#c18b30"
+              strokeWidth={dimensions.pinCutoutRadius}
+              fill="none"
+            />
+            <text fill="var(--tw-prose-body)" x={x + (dimensions.pinCutoutRadius * 1.5)} y={y + (dimensions.pinInterval / 4)} font-size="10px" textLength={(dimensions.adjustedBoardWidth + dimensions.xOffset) - (x + (dimensions.pinCutoutRadius * 1.5))} lengthAdjust="spacingAndGlyphs">LoRa 1</text>
+          </g>
         )
       })}
     </svg>
