@@ -27,11 +27,13 @@ export const PinoutLabel = (gpio, y, dimensions): JSX.Element => {
     placement.gpioLabel.x = dimensions.xOffset - placement.gpioLabel.width - placement.labelMargin
     placement.pinCircle.x = dimensions.xOffset + dimensions.silkscreenWidth
     placement.silkscreenLabel.x = dimensions.xOffset
+    placement.meshtasticLabel.x = placement.gpioLabel.x - placement.labelMargin - placement.meshtasticLabel.width
   }
   if (gpio.side == "right") {
     placement.gpioLabel.x = dimensions.xOffset + dimensions.boardWidth + placement.labelMargin
     placement.pinCircle.x = dimensions.xOffset + dimensions.boardWidth - dimensions.silkscreenWidth
-    placement.silkscreenLabel.x = dimensions.xOffset
+    placement.silkscreenLabel.x = dimensions.xOffset + dimensions.boardWidth - dimensions.silkscreenWidth
+    placement.meshtasticLabel.x = placement.gpioLabel.x + placement.gpioLabel.width + placement.labelMargin
   }
 
   if (gpio["meshtastic"])  {
