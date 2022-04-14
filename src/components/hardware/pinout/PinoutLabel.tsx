@@ -2,8 +2,8 @@ import React from 'react';
 
 export const PinoutLabel = (gpio, y, dimensions): JSX.Element => {
   let placement = {
-    fontSize: dimensions.pinInterval - 2,
-    boxHeight: dimensions.pinInterval - 2,
+    fontSize: dimensions.pinInterval * 0.75,
+    boxHeight: dimensions.pinInterval * 0.85,
     labelMargin: 10,
     pinCircle: {
       color: "#c18b30",
