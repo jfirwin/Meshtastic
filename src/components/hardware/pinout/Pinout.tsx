@@ -1,15 +1,22 @@
 import React from 'react';
-import { CirclePath, MeshtasticLogoPath, BoardPath } from '@site/src/utils/pinout'
+import { CirclePath, MeshtasticLogoPath, BoardPath, LargerNum } from '@site/src/utils/pinout'
 import { PinoutLabel } from '@site/src/components/hardware/pinout/PinoutLabel'
 
-export const Pinout = (gpio): JSX.Element => {
+export const Pinout = ({gpio}): JSX.Element => {
 
-gpio = [
-  {side: "left", silkscreen: "LoRa 1", gpio: '1', meshtastic: "PIN_UP_BUTTON"},
-  {side: "right", silkscreen: "GND", gpio: '2', meshtastic: "THIS_MESSAGE"},
-  {side: "left", silkscreen: "3V3", gpio: '3'},
-  {side: "right", silkscreen: "5V", gpio: '4'}
-]
+let left = []
+let right = []
+let top = []
+let bottom = []
+
+gpio.map(e => {
+  if (e.side == "left") { left.push(e) }
+  if (e.side == "right") { right.push(e) }
+  if (e.side == "top") { top.push(e) }
+  if (e.side == "bottom") { bottom.push(e) }
+})
+
+let formattedGpio = [left, right, top, bottom]
 
 const dimensions = {
   height: "500",
@@ -28,7 +35,7 @@ const dimensions = {
   logoScale: 1,
 }
 
-dimensions.adjustedBoardHeight = dimensions.boardHeight + (dimensions.pinInterval * (gpio.length))
+dimensions.adjustedBoardHeight = dimensions.boardHeight + (dimensions.pinInterval * (LargerNum(formattedGpio[0].length, formattedGpio[1].length)))
 dimensions.xOffset = (dimensions.width / 2) - (dimensions.boardWidth / 2)
 dimensions.yOffset = (dimensions.height / 2) - (dimensions.adjustedBoardHeight / 2)
 dimensions.logoWidth = dimensions.boardWidth - (dimensions.silkscreenWidth * 2.5)
@@ -68,11 +75,16 @@ const key = [
           )
         })}
       </g>
-      <path d={BoardPath(dimensions, gpio).join(" ")} fill="url(#boardGradient)"/>
-      {gpio.map((e, index) => {
+      <path d={BoardPath(dimensions, left, right, top, bottom).join(" ")} fill="url(#boardGradient)"/>
+      {left.map(e =>{
+        return PinoutLabel(e, dimensions)
+      })/*gpio.map((e, index) => {
         let y = (dimensions.boardHeight / 2) + (dimensions.pinInterval / 2) + ((index) * (dimensions.pinInterval)) + dimensions.yOffset
         let x = dimensions.boardWidth - dimensions.silkscreenWidth - dimensions.pinRadius + dimensions.xOffset
         return PinoutLabel(e, y, dimensions)
+      })*/}
+      {right.map(e => {
+        return PinoutLabel(e, dimensions)
       })}
       <path d={MeshtasticLogoPath(dimensions)} fill="rgb(103, 234, 148)"/>
     </svg>

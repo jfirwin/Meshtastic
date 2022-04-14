@@ -15,11 +15,15 @@ enum PinUsage {
   GNSS,
 }
 
+enum Side {
+  top,
+  bottom,
+  left,
+  right,
+}
 export interface Pin {
-  offset: {
-    x: number;
-    y: number;
-  };
+  side?: Side;
+  index: string;
   name: string;
   label: string;
   usage?: PinUsage;

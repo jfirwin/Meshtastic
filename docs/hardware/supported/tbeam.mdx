@@ -5,8 +5,10 @@ sidebar_label: LILYGO® T-Beam
 ---
 
 import { Pinout } from '@site/src/components/hardware/pinout/Pinout'
+import { tbeam } from '@site/src/data/devices/tbeam';
 
-<Pinout/>
+
+<Pinout gpio={tbeam.pinout}/>
 
 ## T-Beam - Meshtastic - v1.1
 

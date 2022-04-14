@@ -9,12 +9,19 @@ export const MeshtasticLogoPath = (dimensions) => {
   let x = dimensions.xOffset - (logoWidth / 2) + (dimensions.logoScale * 10.049) + (dimensions.boardWidth / 2)
   // + (10.049 * dimensions.logoScale) + (dimensions.adjustedBoardWidth / 2) - (logoWidth / 2)
   let y = dimensions.yOffset + (dimensions.adjustedBoardHeight / 2) - (logoHeight / 2)
-  console.log(`x:${dimensions.xOffset}, y:${dimensions.yOffset}, boardWidth:${dimensions.boardWidth}, boardHeight:${dimensions.boardHeight} `)
-
   return `M ${x} ${y} l ${1.797 * dimensions.logoScale} ${1.225 * dimensions.logoScale} l ${-9.949 * dimensions.logoScale} ${14.59 * dimensions.logoScale} l ${-1.797 * dimensions.logoScale} ${-1.225 * dimensions.logoScale} l ${9.949 * dimensions.logoScale} ${-14.59 * dimensions.logoScale} l ${-9.949 * dimensions.logoScale} ${0 * dimensions.logoScale} z  m ${9.719 * dimensions.logoScale} ${3.337 * dimensions.logoScale} l ${-8.517 * dimensions.logoScale} ${12.491 * dimensions.logoScale} l ${-1.796 * dimensions.logoScale} ${-1.225 * dimensions.logoScale} l ${9.413 * dimensions.logoScale} ${-13.805 * dimensions.logoScale} c ${0.202236 * dimensions.logoScale} ${-0.29671931 * dimensions.logoScale} ${0.538164 * dimensions.logoScale} ${-0.47433818 * dimensions.logoScale} ${0.897234 * dimensions.logoScale} ${-0.47478038 * dimensions.logoScale} c ${0.359219 * dimensions.logoScale} ${-0.0002948 * dimensions.logoScale} ${0.695295 * dimensions.logoScale} ${0.17673445 * dimensions.logoScale} ${0.89812 * dimensions.logoScale} ${0.47315896 * dimensions.logoScale} l ${9.435 * dimensions.logoScale} ${13.784 * dimensions.logoScale} l ${-1.794 * dimensions.logoScale} ${1.228 * dimensions.logoScale} l ${-8.537 * dimensions.logoScale} ${-12.471 * dimensions.logoScale} z`
 }
 
-export const BoardPath = (dimensions, gpio) => {
+export const LargerNum = (num1, num2) => {
+  let largerNum = 0;
+  num1 >= num2
+    ? largerNum = num1
+    : largerNum = num2
+  console.log("LARGERNUM", largerNum)
+  return largerNum
+}
+
+export const BoardPath = (dimensions, left, right, top, bottom) => {
   let x = {
     left: dimensions.xOffset,
     right: dimensions.xOffset + dimensions.adjustedBoardWidth,
@@ -53,15 +60,31 @@ export const BoardPath = (dimensions, gpio) => {
     CirclePath((dimensions.cutoutRadius * 2) + dimensions.xOffset, dimensions.adjustedBoardHeight - (dimensions.cutoutRadius * 2) + dimensions.yOffset ,dimensions.cutoutRadius), // bottom left corner cutout
   ]
 
-  gpio.map((e, index) => {
+  left.map((e, index) => {
     path.push(CirclePath(
       dimensions.silkscreenWidth + dimensions.xOffset, // x
       (dimensions.boardHeight / 2) + (dimensions.pinInterval / 2) + ((index) * (dimensions.pinInterval)) + dimensions.yOffset, // y
       dimensions.pinRadius // radius
     )) // Left side
+  })
+  right.map((e, index) => {
     path.push(CirclePath(
       dimensions.boardWidth - dimensions.silkscreenWidth + dimensions.xOffset, // x
       (dimensions.boardHeight / 2) + (dimensions.pinInterval / 2) + ((index) * (dimensions.pinInterval)) + dimensions.yOffset, // y
+      dimensions.pinRadius // radius
+    )) // Right side
+  })
+  top.map((e, index) => {
+    path.push(CirclePath(
+      (dimensions.boardWidth / 2) + (dimensions.pinInterval / 2) + ((index) * (dimensions.pinInterval)) + dimensions.xOffset, // x
+      dimensions.boardHeight - dimensions.silkscreenWidth + dimensions.yOffset, // y
+      dimensions.pinRadius // radius
+    )) // Right side
+  })
+  bottom.map((e, index) => {
+    path.push(CirclePath(
+      (dimensions.boardWidth / 2) + (dimensions.pinInterval / 2) + ((index) * (dimensions.pinInterval)) + dimensions.xOffset, // x
+       dimensions.yOffset + dimensions.adjustedBoardHeight - dimensions.silkscreenWidth, // y
       dimensions.pinRadius // radius
     )) // Right side
   })
