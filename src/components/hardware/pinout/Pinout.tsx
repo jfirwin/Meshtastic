@@ -4,6 +4,7 @@ import { PinoutLabel } from '@site/src/components/hardware/pinout/PinoutLabel'
 
 export const Pinout = ({gpio}): JSX.Element => {
 
+/* Sort array by side for appropriate label creation */
 let left = []
 let right = []
 let top = []
@@ -16,6 +17,9 @@ gpio.map(e => {
   if (e.side == "bottom") { bottom.push(e) }
 })
 
+/* TODO add sorting to left,right,top,bottom to ensure GPIO order is correct */
+
+/* Put gpio together in a single array */
 let formattedGpio = [left, right, top, bottom]
 
 const dimensions = {
@@ -29,32 +33,23 @@ const dimensions = {
   pinRadius: 3,
   pinInterval: 30,
   silkscreenWidth: 30,
-  xOffset: 0, // used for centering board on svg
-  yOffset: 0, // used for centering board on svg
+  xOffset: 0,
+  yOffset: 0,
   logoWidth: 35,
   logoScale: 1,
 }
 
+/* Centering board and setting height/width according to number of GPIO */
 dimensions.adjustedBoardHeight = dimensions.boardHeight + (dimensions.pinInterval * (LargerNum(formattedGpio[0].length, formattedGpio[1].length)))
 dimensions.xOffset = (dimensions.width / 2) - (dimensions.boardWidth / 2)
 dimensions.yOffset = (dimensions.height / 2) - (dimensions.adjustedBoardHeight / 2)
 dimensions.logoWidth = dimensions.boardWidth - (dimensions.silkscreenWidth * 2.5)
 dimensions.logoScale = dimensions.logoWidth / 30
 
-
-const key = [
-  {name: "GPIO", color: "Pink"},
-  {name: "Silkscreen Label", color: "White"},
-  {name: "Meshtastic Definition", color: "rgb(103, 234, 148)"},
-  {name: "Free", color: "#c18b30"},
-  {name: "GPS", color: "Red"},
-  {name: "LoRa", color: "Blue"},
-  {name: "Power", color: "Yellow"},
-  {name: "Sensor", color: "Orange"},
-]
-
   return (
     <svg height={dimensions.height} width={dimensions.width}>
+
+    /* Create gradient for board */
     <defs xmlns="http://www.w3.org/2000/svg" id="defs2476">
       <linearGradient id="boardGradient">
         <stop style={{stopColor:"#000000"}} offset="0" id="boardStop1"/>
@@ -62,30 +57,25 @@ const key = [
       </linearGradient>
       <linearGradient xlinkHref="#boardGradient" id="boardGradient" x1={(dimensions.boardWidth / 2) + dimensions.xOffset} y1={dimensions.adjustedBoardHeight + dimensions.yOffset} x2={(dimensions.boardWidth / 2) + dimensions.xOffset} y2={dimensions.yOffset - 75} gradientUnits="userSpaceOnUse"/>
     </defs>
-      <rect height={dimensions.height} width={dimensions.width} fill="none"/>
-      <g>
-        {key.map((e, index) => {
-          let keyY = (index + 1) * 20
-          return (
-            <g x="10" y={(index + 1) * 20}>
-              <rect height="20" width="20" x="0" y={keyY} fill={e.color}/>
-              <rect height="2" width="10" x="30" y={keyY + 9} fill="black"/>
-              <text x="50" y={keyY + 15} style={{fill: "var(--tw-prose-body)"}}>{e.name}</text>
-            </g>
-          )
-        })}
-      </g>
+
+      /* Create board (including cutouts for each GPIO) and apply gradient */
       <path d={BoardPath(dimensions, left, right, top, bottom).join(" ")} fill="url(#boardGradient)"/>
+
+      /* Set GPIO labels */
       {left.map(e =>{
         return PinoutLabel(e, dimensions)
-      })/*gpio.map((e, index) => {
-        let y = (dimensions.boardHeight / 2) + (dimensions.pinInterval / 2) + ((index) * (dimensions.pinInterval)) + dimensions.yOffset
-        let x = dimensions.boardWidth - dimensions.silkscreenWidth - dimensions.pinRadius + dimensions.xOffset
-        return PinoutLabel(e, y, dimensions)
-      })*/}
+      })}
       {right.map(e => {
         return PinoutLabel(e, dimensions)
       })}
+      {top.map(e => {
+        return PinoutLabel(e, dimensions)
+      })}
+      {bottom.map(e => {
+        return PinoutLabel(e, dimensions)
+      })}
+
+      /* Add Meshtastic Logo to board (auto centered/scaled) */
       <path d={MeshtasticLogoPath(dimensions)} fill="rgb(103, 234, 148)"/>
     </svg>
   );
