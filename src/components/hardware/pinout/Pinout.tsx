@@ -28,7 +28,7 @@ const dimensions = {
   boardHeight: 50,
   adjustedBoardHeight: null,
   boardWidth: 120,
-  adjustedBoardWidth: 90,
+  adjustedBoardWidth: null,
   cutoutRadius: 6,
   pinRadius: 3,
   pinInterval: 30,
@@ -41,9 +41,10 @@ const dimensions = {
 
 /* Centering board and setting height/width according to number of GPIO */
 dimensions.adjustedBoardHeight = dimensions.boardHeight + (dimensions.pinInterval * (LargerNum(formattedGpio[0].length, formattedGpio[1].length)))
+dimensions.adjustedBoardWidth = dimensions.boardWidth + (dimensions.pinInterval * (LargerNum(formattedGpio[2].length, formattedGpio[3].length)))
 dimensions.xOffset = (dimensions.width / 2) - (dimensions.boardWidth / 2)
 dimensions.yOffset = (dimensions.height / 2) - (dimensions.adjustedBoardHeight / 2)
-dimensions.logoWidth = dimensions.boardWidth - (dimensions.silkscreenWidth * 2.5)
+dimensions.logoWidth = dimensions.adjustedBoardWidth - (dimensions.silkscreenWidth * 2.5)
 dimensions.logoScale = dimensions.logoWidth / 30
 
   return (
@@ -55,24 +56,24 @@ dimensions.logoScale = dimensions.logoWidth / 30
         <stop style={{stopColor:"#000000"}} offset="0" id="boardStop1"/>
         <stop style={{stopColor:"#8b8b8b"}} offset="1" id="boardStop2"/>
       </linearGradient>
-      <linearGradient xlinkHref="#boardGradient" id="boardGradient" x1={(dimensions.boardWidth / 2) + dimensions.xOffset} y1={dimensions.adjustedBoardHeight + dimensions.yOffset} x2={(dimensions.boardWidth / 2) + dimensions.xOffset} y2={dimensions.yOffset - 75} gradientUnits="userSpaceOnUse"/>
+      <linearGradient xlinkHref="#boardGradient" id="boardGradient" x1={(dimensions.adjustedBoardWidth / 2) + dimensions.xOffset} y1={dimensions.adjustedBoardHeight + dimensions.yOffset} x2={(dimensions.adjustedBoardWidth / 2) + dimensions.xOffset} y2={dimensions.yOffset} gradientUnits="userSpaceOnUse"/>
     </defs>
 
       /* Create board (including cutouts for each GPIO) and apply gradient */
       <path d={BoardPath(dimensions, left, right, top, bottom).join(" ")} fill="url(#boardGradient)"/>
 
       /* Set GPIO labels */
-      {left.map(e =>{
-        return PinoutLabel(e, dimensions)
+      {left.map(gpio =>{
+        return PinoutLabel(gpio, dimensions)
       })}
-      {right.map(e => {
-        return PinoutLabel(e, dimensions)
+      {right.map(gpio => {
+        return PinoutLabel(gpio, dimensions)
       })}
-      {top.map(e => {
-        return PinoutLabel(e, dimensions)
+      {top.map(gpio => {
+        return PinoutLabel(gpio, dimensions)
       })}
-      {bottom.map(e => {
-        return PinoutLabel(e, dimensions)
+      {bottom.map(gpio => {
+        return PinoutLabel(gpio, dimensions)
       })}
 
       /* Add Meshtastic Logo to board (auto centered/scaled) */
