@@ -170,6 +170,14 @@ export const tbeam: IDevice = {
       index: 12,
     },
     {
+      label: 'IO38',
+      name: 'IO38',
+      pinNumber: 38,
+      meshtastic: "BUTTON_PIN",
+      side: 'left',
+      index: 13,
+    },
+    {
       label: 'TX',
       name: 'IO1',
       pinNumber: 1,
