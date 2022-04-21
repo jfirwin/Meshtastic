@@ -56,11 +56,11 @@ dimensions.logoScale = dimensions.logoWidth / 30
         <stop style={{stopColor:"#000000"}} offset="0" id="boardStop1"/>
         <stop style={{stopColor:"#8b8b8b"}} offset="1" id="boardStop2"/>
       </linearGradient>
-      <linearGradient xlinkHref="#boardGradient" id="boardGradient" x1={(dimensions.adjustedBoardWidth / 2) + dimensions.xOffset} y1={dimensions.adjustedBoardHeight + dimensions.yOffset} x2={(dimensions.adjustedBoardWidth / 2) + dimensions.xOffset} y2={dimensions.yOffset} gradientUnits="userSpaceOnUse"/>
+      <linearGradient xlinkHref="#boardGradient" id="gpioBoardGradient" x1={(dimensions.adjustedBoardWidth / 2) + dimensions.xOffset} y1={dimensions.adjustedBoardHeight + dimensions.yOffset} x2={(dimensions.adjustedBoardWidth / 2) + dimensions.xOffset} y2={dimensions.yOffset} gradientUnits="userSpaceOnUse"/>
     </defs>
 
       /* Create board (including cutouts for each GPIO) and apply gradient */
-      <path d={BoardPath(dimensions, left, right, top, bottom).join(" ")} fill="url(#boardGradient)"/>
+      <path d={BoardPath(dimensions, left, right, top, bottom).join(" ")} fill="url(#gpioBoardGradient)"/>
 
       /* Set GPIO labels */
       {left.map(gpio =>{
