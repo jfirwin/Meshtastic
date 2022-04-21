@@ -2,92 +2,143 @@ import React from 'react';
 
 export const PinoutLabel = (gpio, dimensions): JSX.Element => {
   let placement = {
-    fontSize: dimensions.pinInterval * 0.75,
+    fontSize: dimensions.pinInterval * 0.60,
     boxHeight: dimensions.pinInterval * 0.85,
     labelMargin: 10,
-    pinCircle: {
+    pin: {
       color: "#c18b30",
-      width: dimensions.pinRadius,
       x: null,
       y: null,
     },
-    gpioLabel: {
+    gpio: {
       width: dimensions.pinInterval,
       x: null,
       y: null,
     },
-    silkscreenLabel: {
+    label: {
       width: dimensions.silkscreenWidth,
       x: null,
       y: null,
     },
-    meshtasticLabel: {
+    meshtastic: {
       width: 100,
       x: null,
       y: null,
     },
+    symbol: {
+      width: dimensions.labelMargin,
+      x: null,
+      y: null,
+    },
   }
+
   if (gpio.side == "left") {
-    placement.gpioLabel.x = dimensions.xOffset - placement.gpioLabel.width - placement.labelMargin
-    placement.pinCircle.x = dimensions.xOffset + dimensions.silkscreenWidth
-    placement.silkscreenLabel.x = dimensions.xOffset
-    placement.meshtasticLabel.x = placement.gpioLabel.x - placement.labelMargin - placement.meshtasticLabel.width
+    placement.gpio.x = dimensions.xOffset - placement.gpio.width - placement.labelMargin
+    placement.symbol.x = placement.gpio.x + placement.gpio.width + placement.labelMargin
+    placement.pin.x = dimensions.xOffset + dimensions.silkscreenWidth
+    placement.label.x = dimensions.xOffset
+    placement.meshtastic.x = placement.gpio.x - placement.labelMargin - placement.meshtastic.width
     let y = (dimensions.boardHeight / 2) + (dimensions.pinInterval / 2) + ((gpio.index) * (dimensions.pinInterval)) + dimensions.yOffset
-    placement.pinCircle.y = y
-    placement.silkscreenLabel.y = y
-    placement.meshtasticLabel.y = y
-    placement.gpioLabel.y = y
+    placement.pin.y = y
+    placement.label.y = y
+    placement.meshtastic.y = y
+    placement.gpio.y = y
+    placement.symbol.y = y
 
   }
   if (gpio.side == "right") {
-    placement.gpioLabel.x = dimensions.xOffset + dimensions.boardWidth + placement.labelMargin
-    placement.pinCircle.x = dimensions.xOffset + dimensions.boardWidth - dimensions.silkscreenWidth
-    placement.silkscreenLabel.x = dimensions.xOffset + dimensions.boardWidth - dimensions.silkscreenWidth
-    placement.meshtasticLabel.x = placement.gpioLabel.x + placement.gpioLabel.width + placement.labelMargin
+    placement.gpio.x = dimensions.xOffset + dimensions.adjustedBoardWidth + placement.labelMargin
+    placement.pin.x = dimensions.xOffset + dimensions.adjustedBoardWidth - dimensions.silkscreenWidth
+    placement.label.x = dimensions.xOffset + dimensions.adjustedBoardWidth - dimensions.silkscreenWidth
+    placement.meshtastic.x = placement.gpio.x + placement.gpio.width + placement.labelMargin
     let y = (dimensions.boardHeight / 2) + (dimensions.pinInterval / 2) + ((gpio.index) * (dimensions.pinInterval)) + dimensions.yOffset
-    placement.pinCircle.y = y
-    placement.silkscreenLabel.y = y
-    placement.meshtasticLabel.y = y
-    placement.gpioLabel.y = y
+    placement.pin.y = y
+    placement.label.y = y
+    placement.meshtastic.y = y
+    placement.gpio.y = y
+    placement.symbol.y = y
 
   }
 
   if (gpio["meshtastic"])  {
-    placement.pinCircle.color = "rgb(103, 234, 148)"
+    placement.pin.color = "rgb(103, 234, 148)"
   }
 
   let fontSize = dimensions.pinInterval - 4
   let boxHeight = dimensions.pinInterval - 4
+
   return (
     <g>
       <circle
         r={dimensions.pinRadius}
-        cx={placement.pinCircle.x}
-        cy={placement.pinCircle.y}
-        stroke={placement.pinCircle.color}
+        cx={placement.pin.x}
+        cy={placement.pin.y}
+        stroke={placement.pin.color}
         strokeWidth={dimensions.pinRadius}
         fill="none"
       />
       <path/>
 
       <text
-        x={placement.silkscreenLabel.x}
-        y={placement.silkscreenLabel.y + (placement.fontSize / 3)}
+        x={placement.label.x + (placement.label.width / 2)}
+        y={placement.label.y}
         fill="white"
         fontSize={placement.fontSize}
-        textLength={dimensions.silkscreenWidth}
-        lengthAdjust="spacingAndGlyphs"
+        textAnchor="middle"
+        alignmentBaseline="middle"
+        // textLength={dimensions.silkscreenWidth * 0.85}
+        // lengthAdjust="spacingAndGlyphs"
       >
         {gpio.label}
       </text>
 
-      <rect x={placement.meshtasticLabel.x} y={placement.meshtasticLabel.y - (placement.fontSize / 2)} fill="blue" height={boxHeight} width={placement.meshtasticLabel.width} ry={6}/>
-      <text x={placement.meshtasticLabel.x} y={placement.meshtasticLabel.y + (placement.fontSize / 3)} fill="white" fontSize={placement.fontSize} textLength={placement.meshtasticLabel.width} lengthAdjust="spacingAndGlyphs">
+      <path
+        d={GroundPath(placement.symbol.x, placement.symbol.y, dimensions, placement)}
+        stroke="green"
+        strokeWidth="1px"
+        fill="none"
+      />
+
+      <rect
+        x={placement.meshtastic.x}
+        y={placement.meshtastic.y - (boxHeight / 2)}
+        fill="blue"
+        height={boxHeight}
+        width={placement.meshtastic.width}
+        ry={6}
+      />
+      <text
+        x={placement.meshtastic.x + (placement.meshtastic.width / 2)}
+        y={placement.meshtastic.y}
+        fill="white"
+        fontSize={placement.fontSize}
+        textAnchor="middle"
+        alignmentBaseline="middle"
+        //textLength={placement.meshtastic.width}
+        //lengthAdjust="spacingAndGlyphs"
+      >
+        {console.log("placement.meshtastic.y", placement.meshtastic.y)}
         {gpio.meshtastic}
       </text>
 
-      <rect x={placement.gpioLabel.x} y={placement.gpioLabel.y - (placement.fontSize / 2)} fill="pink" height={boxHeight} width={placement.gpioLabel.width} ry={6}/>
-      <text x={placement.gpioLabel.x} y={placement.gpioLabel.y + (placement.fontSize / 3)} fill="white" fontSize={placement.fontSize} textLength={placement.gpioLabel.width} lengthAdjust="spacingAndGlyphs">
+      <rect
+        x={placement.gpio.x}
+        y={placement.gpio.y - (boxHeight / 2)}
+        fill="grey"
+        height={boxHeight}
+        width={placement.gpio.width}
+        ry={6}
+      />
+      <text
+        x={placement.gpio.x + (placement.gpio.width / 2)}
+        y={placement.gpio.y}
+        fill="white"
+        fontSize={placement.fontSize}
+        textAnchor="middle"
+        alignmentBaseline="middle"
+        //textLength={placement.gpio.width}
+        //lengthAdjust="spacingAndGlyphs"
+      >
         {gpio.pinNumber}
       </text>
 
