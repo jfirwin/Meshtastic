@@ -4,7 +4,7 @@ export const MeshtasticLogoPath = (x, y, scale) => {
     let logoHeight = 15.828 * scale
     let pathCommands = [
         `M ${x} ${y}`, // Move to specified center point on SVG canvas
-        `m ${9.949 -logoWidth/2 * scale} ${-logoHeight/2 * scale}`, // offset center (we start drawing the top corner of the "/" first (9.494, 0))
+        `m ${((9.949 * scale) -(logoWidth/2))} ${(-logoHeight/2)}`, // offset center (we start drawing the top corner of the "/" first (9.494, 0))
         `l ${1.797 * scale} ${1.225 * scale}`, // clockwise line "/"
         `l ${-9.949 * scale} ${14.59 * scale}`, // clockwise line "/"
         `l ${-1.797 * scale} ${-1.225 * scale}`, // clockwise line "/"
