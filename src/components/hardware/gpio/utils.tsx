@@ -30,3 +30,25 @@ export const MeshtasticLogoPath = (x, y, scale) => {
     return { pathCommands: pathCommands.join(" "), logoHeight, logoWidth }
 }
   
+  export const PcbPath = (dimensions, gpio) => {
+    let corner = 15
+    let margin = corner / 2.25  
+    let pathCommands = [
+      `m ${corner} 0`, // inside top left corner
+      `l ${dimensions.width - (corner * 2)} 0`, // top edge
+      `c ${corner} 0 ${corner} 0 ${corner} ${corner}`, // top right corner
+      `l 0 ${dimensions.height - (corner * 2)}`, // right edge
+      `c 0 ${corner} 0 ${corner} -${corner} ${corner}`, // bottom right corner
+      `l -${dimensions.width - (corner * 2)} 0`, // bottom edge
+      `c -${corner} 0 -${corner} 0 -${corner} -${corner}`, // bottom left corner
+      `l 0 -${dimensions.height - (corner * 2)}`, // left edge
+      `c 0 -${corner} 0 -${corner} ${corner} -${corner}`, // top left corner
+      `z`, // close path
+      CirclePath(margin, margin, corner / 4 , null),
+      CirclePath(dimensions.width - margin,margin, corner / 4 , null),
+      CirclePath(dimensions.width - margin, dimensions.height - margin, corner / 4 , null),
+      CirclePath(margin, dimensions.height - margin, corner / 4 , null),
+    ]
+    
+    return pathCommands.join(" ")
+  }
