@@ -1,3 +1,8 @@
+export const CirclePath = (cx, cy, r, note) => {
+    console.log(note, cx, cy, r)
+    return `M ${cx} ${cy} m 0 ${-r} a ${r} ${r} 0 0 1 ${r} ${r} a ${r} ${r} 0 0 1 -${r} ${r} a ${r} ${r} 0 0 1 -${r} -${r} a ${r} ${r} 0 0 1 ${r} -${r} z`
+}
+  
 export const MeshtasticLogoPath = (x, y, scale) => {
     if (!scale) { scale = 1 }
     let logoWidth = 30 * scale
